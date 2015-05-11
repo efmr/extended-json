@@ -1,7 +1,6 @@
 ﻿# Extended-JSON
 
-[Extended JSON][ejson] forked from [mongodb-js/extended-json.git][github] which is a spec of [MongoDB Extended JSON][ejson] parse and stringify that is friendly with
-[bson][bson] and protects against coerced numbers and booleans to strings (eg. [Redis][redis]) by extending the JSON with $number and $boolean type and is actually compliant with the [kernel][json_cpp].
+[Extended JSON][ejson] forked from [mongodb-js/extended-json.git][github] which is a spec of [MongoDB Extended JSON][ejson] parse and stringify that is friendly with [bson][bson] and is actually compliant with the [kernel][json_cpp]. This fork extends the types to $boolean and $number to protects against coerced numbers and booleans to strings (eg. [Redis][redis]) of inflated objects values.
 
 ## Install
 
