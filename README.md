@@ -1,7 +1,7 @@
 ﻿# Extended-JSON
 
 [Extended JSON][ejson] forked from [mongodb-js/extended-json.git][github] which is a spec of [MongoDB Extended JSON][ejson] parse and stringify that is friendly with
-[bson][bson] and protects against coerced numbers to strings (eg. [Redis][redis]) by extending the JSON with $number type and is actually compliant with the [kernel][json_cpp].
+[bson][bson] and protects against coerced numbers and booleans to strings (eg. [Redis][redis]) by extending the JSON with $number and $boolean type and is actually compliant with the [kernel][json_cpp].
 
 ## Install
 
@@ -16,38 +16,46 @@ var BSON = require('bson');
 
 var doc = {
   _id: BSON.ObjectID(),
-  last_seen_at: new Date(),
+  last_seen: new Date(),
   display_name: undefined,
-  count: 12.3e-10
+  count: 12.3e-10,
+  isValid: true
 };
 
 console.log('Doc', doc);
 // > Doc { _id: 53c2ab5e4291b17b666d742a,
-//  last_seen_at: Sun Jul 13 2014 11:53:02 GMT-0400 (EDT), 
+//  last_seen: Sun Jul 13 2014 11:53:02 GMT-0400 (EDT), 
 //  display_name: undefined, 
-//  count: 12.3e-10 }
+//  count: 12.3e-10,
+//  isValid: true }
 
 console.log('JSON', JSON.stringify(doc));
-// > JSON {"_id":"53c2ab5e4291b17b666d742a","last_seen_at":"2014-07-13T15:53:02.008Z", "count": 12.3e-10}
+// > JSON {"_id":"53c2ab5e4291b17b666d742a","last_seen":"2014-07-13T15:53:02.008Z",\
+// "count":12.3e-10,"isValid":true}
 
 console.log('EJSON', EJSON.stringify(doc));
-// > EJSON {"_id":{"$oid":"53c2ab5e4291b17b666d742a"},"last_seen_at":{"$date":1405266782008},\
-// "display_name":{"$undefined":true}, "count": {$number: 12.3e-10}}
+// > EJSON {"_id":{"$oid":"53c2ab5e4291b17b666d742a"},"last_seen":{"$date":1405266782008},\
+// "display_name":{"$undefined":true},"count":{$number:12.3e-10},"isValid":{$boolean:true}}
 
-// And likewise, EJSON.parse works just as you would expect. Even if numbers are coerced into string (Redis)
-EJSON.parse('{"_id":{"$oid":"53c2ab5e4291b17b666d742a"},"last_seen_at":{"$date":1405266782008},\
-  "display_name":{"$undefined":true}, "count":{"$number": "12.3e-10"}, "n": 123}');
+// And likewise, EJSON.parse works just as you would expect.
+// Even if numbers or booleans are coerced into string (Redis)
+EJSON.parse('{"_id":{"$oid":"53c2ab5e4291b17b666d742a"},"last_seen":{"$date":1405266782008},\
+"display_name":{"$undefined":true},"count":{"$number":"12.3e-10"},"n":123,\
+"isValid":{$boolean:"true"},"isParsed":false}');
 // { _id: 53c2ab5e4291b17b666d742a,
-//  last_seen_at: Sun Jul 13 2014 11:53:02 GMT-0400 (EDT),
+//  last_seen: Sun Jul 13 2014 11:53:02 GMT-0400 (EDT),
 //  display_name: undefined ,
 //  count: 12.3e-10,
-//  n: 123 }
+//  n: 123 ,
+//  isValid: true,
+//  isParsed: false}
 
 console.log('Inflated Object', EJSON.inflate(doc));
 // > Inflated Object { _id: { $oid: 53c2ab5e4291b17b666d742a },
 //  last_seen_at: { $date: 1405266782008 },
 //  display_name: { $undefined: true},
-//  count: { $number: 12.3e-10 } }
+//  count: { $number: 12.3e-10 } ,
+//  isValid: { $boolean: true} }
 ```
 
 ### Streams
@@ -63,7 +71,8 @@ request.get(url)
   .pipe(EJSON.createParseStream('*'))
   .pipe(es.through(function(doc){
     this.emit('data',
-      util.format('_id `%s` has timestamp %s\n', doc._id, doc._id.getTimestamp()));
+      util.format('_id `%s` has timestamp %s\n',
+        doc._id, doc._id.getTimestamp()));
   }))
   .pipe(process.stdout);
 

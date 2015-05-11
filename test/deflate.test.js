@@ -108,6 +108,12 @@ describe('Deflate', function() {
     }), 1);
   });
 
+  it('converts `{$boolean: "false"}` to `false`', function() {
+    assert.deepEqual(deflate({
+      $boolean: 'false'
+    }), false);
+  });
+
   it('DOCS-3879: converts `{$date: <iso string>}` to a proper date', function() {
     assert.equal(deflate({
       $date: "2014-08-25T17:49:42.288-0400"
