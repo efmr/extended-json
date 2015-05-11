@@ -5,8 +5,7 @@ var assert = require('assert'),
   createParseStream = require('../').createParseStream,
   bson = require('bson'),
   fs = require('fs'),
-  os = require('os'),
-  es = require('event-stream');
+  os = require('os');
 
 var util = require('util');
 var Readable = require('stream').Readable;

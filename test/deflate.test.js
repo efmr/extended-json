@@ -2,7 +2,7 @@ var assert = require('assert'),
   deflate = require('../').deflate,
   bson = require('bson');
 
-describe('Defalte', function() {
+describe('Deflate', function() {
   var _id = bson.ObjectID(),
     bin = bson.Binary(new Buffer(1)),
     ref = bson.DBRef('local.startup_log', _id);
@@ -90,10 +90,28 @@ describe('Defalte', function() {
     '/mongodb.com$/g');
   });
 
+  it('converts `{$undefined: "true"}` to `undefined`', function() {
+    assert.deepEqual(deflate({
+      $undefined: 'true'
+    }), undefined);
+  });
+
   it('converts `{$undefined: true}` to `undefined`', function() {
     assert.deepEqual(deflate({
       $undefined: true
     }), undefined);
+  });
+
+  it('converts `{$number: 1}` to `1`', function() {
+    assert.deepEqual(deflate({
+      $number: '1'
+    }), 1);
+  });
+
+  it('converts `{$boolean: false}` to `false`', function() {
+    assert.deepEqual(deflate({
+      $boolean: 'false'
+    }), false);
   });
 
   it('DOCS-3879: converts `{$date: <iso string>}` to a proper date', function() {

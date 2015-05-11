@@ -10,15 +10,15 @@ describe('Inflate', function() {
   it('is a passthrough for primitive types', function() {
     assert.equal(inflate('bson'), 'bson');
     assert.deepEqual(inflate([]), []);
-    assert.deepEqual(inflate(1), 1);
-    assert.deepEqual(inflate(false), false);
+    assert.deepEqual(inflate(1), {$number: '1'});
+    assert.deepEqual(inflate(false), {$boolean: 'false'});
     assert.deepEqual(inflate({
       a: 1
     }), {
-      a: 1
+      a: {$number: '1'}
     });
-    assert.deepEqual(inflate(Infinity), 'Infinity');
-    assert.deepEqual(inflate(-Infinity), '-Infinity');
+    assert.deepEqual(inflate(Infinity), {$number: 'Infinity'});
+    assert.deepEqual(inflate(-Infinity), {$number: '-Infinity'});
   });
 
   it('converts `bson.Long` to `{$numberLong: <str>}`', function() {
