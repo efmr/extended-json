@@ -83,7 +83,7 @@ request.get(url)
 ```
 
 [ejson]: http://docs.mongodb.org/manual/reference/mongodb-extended-json/
-[github]: http://github.com/mongodb-js/mongodb-extended-json.git
+[github]: https://github.com/mongodb-js/extended-json
 [redis]: http://redis.io/
 [bson]: http://github.com/mongodb/js-bson
 [json_cpp]: https://github.com/mongodb/mongo/blob/master/src/mongo/db/json.cpp
