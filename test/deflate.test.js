@@ -102,16 +102,10 @@ describe('Deflate', function() {
     }), undefined);
   });
 
-  it('converts `{$number: 1}` to `1`', function() {
+  it('converts `{$number: "1"}` to `1`', function() {
     assert.deepEqual(deflate({
       $number: '1'
     }), 1);
-  });
-
-  it('converts `{$boolean: false}` to `false`', function() {
-    assert.deepEqual(deflate({
-      $boolean: 'false'
-    }), false);
   });
 
   it('DOCS-3879: converts `{$date: <iso string>}` to a proper date', function() {

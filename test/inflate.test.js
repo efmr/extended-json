@@ -11,7 +11,7 @@ describe('Inflate', function() {
     assert.equal(inflate('bson'), 'bson');
     assert.deepEqual(inflate([]), []);
     assert.deepEqual(inflate(1), {$number: '1'});
-    assert.deepEqual(inflate(false), {$boolean: 'false'});
+    assert.deepEqual(inflate(false), false);
     assert.deepEqual(inflate({
       a: 1
     }), {
