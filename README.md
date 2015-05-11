@@ -1,12 +1,17 @@
-﻿# extended-json
+﻿# Extended-json
 
-[Extended JSON][ejson] parse and stringify that is friendly with
+[Extended JSON][ejson] forked from [mongodb-js/mongodb-extended-json.git](github.com/mongodb-js/mongodb-extended-json.git) which is a spec of [MongoDB Extended JSON][ejson] parse and stringify that is friendly with
 [bson][bson] and protects against coerced numbers to strings (eg. Redis) by extending the JSON with $number type and is actually compliant with the [kernel][json_cpp].
+
+## Install
+
+Install as a submodule in your project
+`git submodule add git@github.com:efmr/extended-json.git lib/extended-json`
 
 ## Example
 
 ```javascript
-var EJSON = require('mongodb-extended-json');
+var EJSON = require('./lib/extended-json');
 var BSON = require('bson');
 
 var doc = {
@@ -28,10 +33,16 @@ console.log('EJSON', EJSON.stringify(doc));
 // And likewise, EJSON.parse works just as you would expect. Even if numbers are coerced into string (Redis)
 EJSON.parse('{"_id":{"$oid":"53c2ab5e4291b17b666d742a"},"last_seen_at":{"$date":1405266782008},"display_name":{"$undefined":true}, "count":{"$number": "12.3e-10"}, "n": 123}');
 // { _id: 53c2ab5e4291b17b666d742a,
-//   last_seen_at: Sun Jul 13 2014 11:53:02 GMT-0400 (EDT),
+//  last_seen_at: Sun Jul 13 2014 11:53:02 GMT-0400 (EDT),
 //  display_name: undefined ,
 //  count: 12.3e-10,
-//  n: 123}
+//  n: 123 }
+
+console.log('Inflated Object', EJSON.inflate(doc));
+// > Inflated Object { _id: { $oid: 53c2ab5e4291b17b666d742a },
+//  last_seen_at: { $date: 1405266782008 },
+//  display_name: { $undefined: true},
+//  count: { $number: 12.3e-10 } }
 ```
 
 ### Streams
@@ -39,7 +50,7 @@ EJSON.parse('{"_id":{"$oid":"53c2ab5e4291b17b666d742a"},"last_seen_at":{"$date":
 ```javascript
 var request = require('request');
 var url = 'https://cdn.rawgit.com/imlucas/mongodb-extended-json/master/test/data.json';
-var EJSON = require('./');
+var EJSON = require('./lib/extended-json');
 var util = require('util');
 var es = require('event-stream');
 
