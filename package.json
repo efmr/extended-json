@@ -7,7 +7,7 @@
   "homepage": "http://github.com/efmr/extended-json",
   "repository": {
     "type": "git",
-    "url": "git://github.com/efmr/extended-json.git"
+    "url": "git+ssh://github.com/efmr/extended-json.git"
   },
   "keywords": [
     "mongodb",
